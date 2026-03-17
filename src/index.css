@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --primary:#0A6EBD; --primary-light:#E8F4FD; --primary-dark:#064E8A;
+  --accent:#00C9A7; --accent-light:#E0FAF5;
+  --danger:#E84545; --danger-light:#FEF0F0;
+  --warning:#F5A623; --warning-light:#FFF8EC;
+  --success:#22C55E; --success-light:#EDFAF3;
+  --bg:#F5F7FA; --bg-card:#FFFFFF; --bg-sidebar:#0D1B2A;
+  --text-primary:#0D1B2A; --text-secondary:#5A6A7E; --text-muted:#9AAABB; --text-on-dark:#A8BCCF;
+  --border:#E4EAF0; --border-strong:#C8D5E0;
+  --r-sm:6px; --r:10px; --r-lg:16px; --r-xl:24px;
+  --shadow-sm:0 1px 3px rgba(13,27,42,.06);
+  --shadow:0 4px 16px rgba(13,27,42,.08);
+  --shadow-lg:0 16px 48px rgba(13,27,42,.14);
+  --shadow-xl:0 32px 80px rgba(13,27,42,.18);
+  --sidebar-w:260px; --topbar-h:64px;
+  --font-display:'Sora',sans-serif; --font-body:'DM Sans',sans-serif;
+  --ease:all 0.2s ease;
+}
+html { font-size:16px; -webkit-font-smoothing:antialiased; }
+body { font-family:var(--font-body); background:var(--bg); color:var(--text-primary); line-height:1.6; }
+h1,h2,h3,h4,h5,h6 { font-family:var(--font-display); font-weight:600; line-height:1.3; }
+button { font-family:var(--font-body); cursor:pointer; border:none; outline:none; }
+input,select,textarea { font-family:var(--font-body); outline:none; }
+a { text-decoration:none; color:inherit; }
+::-webkit-scrollbar { width:5px; } ::-webkit-scrollbar-thumb { background:var(--border-strong); border-radius:99px; }
+
+.badge { display:inline-flex; align-items:center; gap:4px; padding:3px 10px; border-radius:99px; font-size:11px; font-weight:600; }
+.badge-primary { background:var(--primary-light); color:var(--primary); }
+.badge-success { background:var(--success-light); color:#16A34A; }
+.badge-danger  { background:var(--danger-light);  color:var(--danger); }
+.badge-warning { background:var(--warning-light); color:#B45309; }
+.badge-muted   { background:var(--bg); color:var(--text-secondary); border:1px solid var(--border); }
+.badge-accent  { background:var(--accent-light); color:#0F6E56; }
+
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:7px; padding:10px 20px; border-radius:var(--r); font-size:14px; font-weight:500; transition:var(--ease); white-space:nowrap; }
+.btn-primary { background:var(--primary); color:#fff; }
+.btn-primary:hover { background:var(--primary-dark); transform:translateY(-1px); box-shadow:0 4px 14px rgba(10,110,189,.3); }
+.btn-accent { background:var(--accent); color:#fff; }
+.btn-accent:hover { background:#00A88C; transform:translateY(-1px); }
+.btn-outline { background:transparent; color:var(--primary); border:1.5px solid var(--primary); }
+.btn-outline:hover { background:var(--primary-light); }
+.btn-ghost { background:transparent; color:var(--text-secondary); }
+.btn-ghost:hover { background:var(--bg); color:var(--text-primary); }
+.btn-danger { background:var(--danger); color:#fff; }
+.btn-dark { background:var(--text-primary); color:#fff; }
+.btn-dark:hover { background:#1e3a56; }
+.btn-white { background:#fff; color:var(--primary); }
+.btn-white:hover { background:rgba(255,255,255,.9); }
+.btn-lg { padding:13px 28px; font-size:15px; border-radius:var(--r-lg); }
+.btn-sm { padding:6px 14px; font-size:12.5px; }
+.btn-icon { padding:8px; border-radius:var(--r-sm); }
+
+.card { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow-sm); }
+
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group label { font-size:12px; font-weight:600; color:var(--text-secondary); text-transform:uppercase; letter-spacing:.05em; }
+.form-group input,.form-group select,.form-group textarea { padding:10px 14px; border:1.5px solid var(--border); border-radius:var(--r); font-size:14px; color:var(--text-primary); background:var(--bg); transition:var(--ease); font-family:var(--font-body); }
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus { border-color:var(--primary); background:#fff; box-shadow:0 0 0 3px rgba(10,110,189,.1); }
+.form-group input::placeholder { color:var(--text-muted); }
+
+.avatar { border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-family:var(--font-display); }
+
+@keyframes fadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+@keyframes scaleIn  { from{opacity:0;transform:scale(.96)} to{opacity:1;transform:scale(1)} }
+@keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes slideRight { from{opacity:0;transform:translateX(-16px)} to{opacity:1;transform:translateX(0)} }
+
+.anim-fade-up { animation:fadeUp .5s ease both; }
+.anim-fade    { animation:fadeIn .4s ease both; }
+.anim-scale   { animation:scaleIn .35s ease both; }
+
+.modal-overlay { position:fixed; inset:0; background:rgba(13,27,42,.5); display:flex; align-items:center; justify-content:center; z-index:500; animation:fadeIn .2s ease; }
+.modal-box { width:520px; max-width:95vw; animation:scaleIn .25s ease; }
+.modal-header { display:flex; align-items:flex-start; justify-content:space-between; padding:20px 22px 16px; border-bottom:1px solid var(--border); }
+.modal-header h2 { font-size:17px; font-weight:700; }
+.modal-body { padding:22px; }
+.modal-footer { display:flex; gap:10px; padding:16px 22px; border-top:1px solid var(--border); justify-content:flex-end; }
+.card-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); }
+.card-header h2 { font-size:14px; font-weight:700; }
+.data-table { width:100%; border-collapse:collapse; }
+.data-table th { text-align:left; font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:.06em; padding:12px 16px; background:var(--bg); border-bottom:1px solid var(--border); }
+.data-table td { padding:13px 16px; border-bottom:1px solid var(--border); font-size:13.5px; }
+.data-table tr:last-child td { border-bottom:none; }
+.data-table tr:hover td { background:var(--bg); }

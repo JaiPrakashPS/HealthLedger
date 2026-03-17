@@ -1,0 +1,11 @@
+.dr-page{display:flex;flex-direction:column;gap:16px;}
+.dr-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.dr-filters{display:flex;gap:6px;flex-wrap:wrap;}
+.filter-pill{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:var(--ease);}
+.filter-pill:hover{border-color:var(--primary);color:var(--primary);}
+.filter-pill.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+.fp-count{background:rgba(255,255,255,.25);padding:1px 7px;border-radius:99px;font-size:11px;}
+.filter-pill:not(.active) .fp-count{background:var(--bg);color:var(--text-muted);}
+.dr-view-area{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);min-height:200px;display:flex;align-items:center;justify-content:center;}
+.dr-pdf-placeholder{display:flex;flex-direction:column;align-items:center;gap:8px;padding:40px;text-align:center;}
+.dr-pdf-placeholder p{font-size:15px;font-weight:600;color:var(--text-primary);}

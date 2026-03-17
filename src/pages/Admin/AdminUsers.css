@@ -1,0 +1,13 @@
+.au-page{display:flex;flex-direction:column;gap:16px;}
+.au-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.au-search{display:flex;align-items:center;gap:8px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r);padding:8px 14px;flex:1;max-width:360px;}
+.au-search input{border:none;background:none;font-size:13px;color:var(--text-primary);flex:1;}
+.au-search input::placeholder{color:var(--text-muted);}
+.au-filters{display:flex;gap:6px;flex-wrap:wrap;}
+.filter-pill{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:99px;font-size:12px;font-weight:500;background:var(--bg-card);border:1.5px solid var(--border);color:var(--text-secondary);cursor:pointer;transition:var(--ease);}
+.filter-pill:hover{border-color:var(--primary);color:var(--primary);}
+.filter-pill.active{background:var(--primary);border-color:var(--primary);color:#fff;}
+.fp-count{background:rgba(255,255,255,.2);padding:1px 7px;border-radius:99px;font-size:11px;}
+.filter-pill:not(.active) .fp-count{background:var(--bg);color:var(--text-muted);}
+.badge-accent{background:var(--accent-light);color:#0F6E56;}
+.badge-purple{background:#F3F0FF;color:#7C3AED;}
