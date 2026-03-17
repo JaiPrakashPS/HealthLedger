@@ -4,27 +4,49 @@ import { useAuth } from '../../context/AuthContext.jsx';
 import './AuthPage.css';
 
 export default function SignupPage() {
-  const { login } = useAuth();
-  const navigate  = useNavigate();
+  const { register } = useAuth();
+  const navigate     = useNavigate();
+
   const [role, setRole]   = useState('patient');
-  const [form, setForm]   = useState({ name:'', email:'', phone:'', pass:'', confirm:'' });
+  const [form, setForm]   = useState({ name: '', email: '', phone: '', password: '', confirm: '', specialization: '', hospital: '', registrationNumber: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const upd = (k, v) => setForm(p => ({ ...p, [k]: v }));
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (form.pass !== form.confirm) { setError('Passwords do not match.'); return; }
-    if (form.pass.length < 6) { setError('Password must be at least 6 characters.'); return; }
+
+    if (form.password !== form.confirm) {
+      setError('Passwords do not match');
+      return;
+    }
+    if (form.password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
     setLoading(true);
-    setTimeout(() => {
-      const user = { id: 'NEW001', name: form.name, email: form.email, role };
-      login(user);
-      navigate(`/${role}`);
+    try {
+      const payload = { name: form.name, email: form.email, password: form.password, role, phone: form.phone };
+      if (role === 'doctor') {
+        payload.specialization      = form.specialization;
+        payload.hospital            = form.hospital;
+        payload.registrationNumber  = form.registrationNumber;
+      }
+
+      const res = await register(payload);
+      if (res.success) {
+        navigate(`/${role}`);
+      } else {
+        setError(res.message || 'Registration failed');
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Registration failed. Try again.');
+    } finally {
       setLoading(false);
-    }, 900);
+    }
   };
 
   return (
@@ -33,14 +55,14 @@ export default function SignupPage() {
         <div className="auth-left-inner">
           <Link to="/" className="auth-logo">
             <div className="logo-mark">H</div>
-            <span>HealthVault</span>
+            <span>HealthLedger</span>
           </Link>
           <div className="auth-hero-text">
-            <h1>Join HealthVault</h1>
-            <p>Create your account and take control of your health records today. It's free to get started.</p>
+            <h1>Join HealthLedger</h1>
+            <p>Create your account and take control of your health records today.</p>
           </div>
           <div className="auth-perks">
-            {['✅ Free to create an account','✅ Unlimited record uploads','✅ Share with any doctor','✅ HIPAA compliant storage'].map(p => (
+            {['✅ Free to create an account', '✅ Unlimited record uploads', '✅ Share with any doctor', '✅ HIPAA compliant storage'].map(p => (
               <div key={p} className="perk-item">{p}</div>
             ))}
           </div>
@@ -54,9 +76,9 @@ export default function SignupPage() {
           <p className="auth-form-sub">Fill in your details to get started</p>
 
           <div className="role-selector">
-            {['patient','doctor','admin'].map(r => (
+            {['patient', 'doctor'].map(r => (
               <button key={r} type="button" className={`role-btn ${role === r ? 'active' : ''}`} onClick={() => setRole(r)}>
-                <span>{r === 'patient' ? '🧑‍💼' : r === 'doctor' ? '👨‍⚕️' : '🏥'}</span>
+                <span>{r === 'patient' ? '🧑‍💼' : '👨‍⚕️'}</span>
                 <span>{r.charAt(0).toUpperCase() + r.slice(1)}</span>
               </button>
             ))}
@@ -75,24 +97,38 @@ export default function SignupPage() {
               <label>Phone number</label>
               <input placeholder="+91 XXXXX XXXXX" value={form.phone} onChange={e => upd('phone', e.target.value)} />
             </div>
+
             {role === 'doctor' && (
-              <div className="form-group">
-                <label>Hospital / Clinic</label>
-                <input placeholder="Hospital name" />
-              </div>
+              <>
+                <div className="form-group">
+                  <label>Specialization</label>
+                  <input placeholder="e.g. Cardiologist" value={form.specialization} onChange={e => upd('specialization', e.target.value)} />
+                </div>
+                <div className="form-group">
+                  <label>Hospital / Clinic</label>
+                  <input placeholder="Hospital name" value={form.hospital} onChange={e => upd('hospital', e.target.value)} />
+                </div>
+                <div className="form-group">
+                  <label>Registration Number</label>
+                  <input placeholder="MCI-XXXX-XXXXX" value={form.registrationNumber} onChange={e => upd('registrationNumber', e.target.value)} />
+                </div>
+              </>
             )}
+
             <div className="form-row-2">
               <div className="form-group">
                 <label>Password</label>
-                <input type="password" placeholder="Min. 6 characters" value={form.pass} onChange={e => upd('pass', e.target.value)} required />
+                <input type="password" placeholder="Min 6 characters" value={form.password} onChange={e => upd('password', e.target.value)} required />
               </div>
               <div className="form-group">
                 <label>Confirm password</label>
                 <input type="password" placeholder="Repeat password" value={form.confirm} onChange={e => upd('confirm', e.target.value)} required />
               </div>
             </div>
-            {error && <div className="auth-error">{error}</div>}
-            <button className="btn btn-primary" style={{ width:'100%' }} disabled={loading}>
+
+            {error && <div className="auth-error">⚠️ {error}</div>}
+
+            <button className="btn btn-primary" style={{ width: '100%' }} disabled={loading}>
               {loading ? 'Creating account…' : 'Create account →'}
             </button>
           </form>

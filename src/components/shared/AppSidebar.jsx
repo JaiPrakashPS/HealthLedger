@@ -45,7 +45,7 @@ export default function AppSidebar({ collapsed, onToggle }) {
           <div className="logo-mark">H</div>
           {!collapsed && (
             <div>
-              <span className="logo-name">HealthVault</span>
+              <span className="logo-name">HealthLedger</span>
               <span className="logo-sub">{roleLabels[user?.role]}</span>
             </div>
           )}

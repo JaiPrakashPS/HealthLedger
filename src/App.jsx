@@ -53,13 +53,13 @@ function AppRoutes() {
         <Route path="appointments" element={<DoctorAppointments />} />
         <Route path="profile"      element={<DoctorProfile />} />
       </Route>
-      <Route path="/admin" element={<Protected role="admin"><AdminLayout /></Protected>}>
+      {/* <Route path="/admin" element={<Protected role="admin"><AdminLayout /></Protected>}>
         <Route index element={<Navigate to="dashboard" replace />} />
         <Route path="dashboard" element={<AdminDashboard />} />
         <Route path="users"     element={<AdminUsers />} />
         <Route path="audit"     element={<AdminAudit />} />
         <Route path="system"    element={<AdminSystem />} />
-      </Route>
+      </Route> */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

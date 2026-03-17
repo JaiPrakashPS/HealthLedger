@@ -1,74 +1,140 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext.jsx';
+import { doctorService } from '../../services/doctor.service.js';
+import { appointmentService } from '../../services/appointment.service.js';
+import { notificationService } from '../../services/notification.service.js';
 import './DoctorDashboard.css';
 
-const stats = [
-  { label:'Patients Today',  value:'8',  sub:'3 appointments pending', color:'blue',   icon:'👥' },
-  { label:'Shared Records',  value:'24', sub:'From 12 patients',        color:'teal',   icon:'📋' },
-  { label:'Appointments',    value:'5',  sub:'Next: 10:00 AM',          color:'green',  icon:'📅' },
-  { label:'Pending Reviews', value:'3',  sub:'2 critical reports',      color:'orange', icon:'⚠️' },
-];
-
-const patients = [
-  { name:'Ravi Shankar',   pid:'2024-0847', condition:'Diabetes, Hypertension', shared:'Blood Test, ECG',    date:'12 Mar 2025', status:'active' },
-  { name:'Ananya Iyer',    pid:'2024-1023', condition:'Asthma',                  shared:'Chest X-Ray',        date:'10 Mar 2025', status:'active' },
-  { name:'Karthik Ram',    pid:'2024-0658', condition:'Back Pain',               shared:'MRI Report',         date:'08 Mar 2025', status:'reviewed' },
-  { name:'Lakshmi Devi',   pid:'2024-0912', condition:'Thyroid',                  shared:'Blood Test',         date:'05 Mar 2025', status:'pending' },
-];
 const stMap = { active:'success', reviewed:'primary', pending:'warning' };
 
 export default function DoctorDashboard() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const { user }   = useAuth();
+  const navigate   = useNavigate();
+  const [patients,      setPatients]      = useState([]);
+  const [appointments,  setAppointments]  = useState([]);
+  const [notifications, setNotifications] = useState([]);
+  const [loading,       setLoading]       = useState(true);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const [patRes, apptRes, notifRes] = await Promise.allSettled([
+          doctorService.getPatients(),
+          appointmentService.getDoctorAppointments({ status: 'upcoming' }),
+          notificationService.getAll(),
+        ]);
+        if (patRes.status   === 'fulfilled') setPatients(patRes.value.data?.patients || []);
+        if (apptRes.status  === 'fulfilled') setAppointments(apptRes.value.data?.appointments || []);
+        if (notifRes.status === 'fulfilled') setNotifications(notifRes.value.data?.notifications || []);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const totalRecords  = patients.reduce((sum, p) => sum + (p.records?.length || 0), 0);
+  const nextAppt      = appointments[0];
+
+  const stats = [
+    { label:'Patients Today',  value: patients.length,      sub: `${totalRecords} records shared`, color:'blue',   icon:'👥' },
+    { label:'Shared Records',  value: totalRecords,         sub: `From ${patients.length} patients`, color:'teal', icon:'📋' },
+    { label:'Appointments',    value: appointments.length,  sub: nextAppt ? `Next: ${nextAppt.time}` : 'No upcoming', color:'green', icon:'📅' },
+    { label:'Notifications',   value: notifications.filter(n => !n.isRead).length, sub: 'Unread', color:'orange', icon:'🔔' },
+  ];
+
+  if (loading) return <div className="dd-page"><div style={{ padding: 60, textAlign: 'center', color: 'var(--text-muted)' }}>Loading dashboard…</div></div>;
+
   return (
     <div className="dd-page">
       <div className="dd-welcome">
         <div>
           <h2>Good morning, {user?.name} 👋</h2>
-          <p>You have <strong>8 patients</strong> today and <strong>3 pending record reviews.</strong></p>
+          <p>
+            {patients.length > 0
+              ? `You have ${patients.length} patient${patients.length > 1 ? 's' : ''} with shared records.`
+              : 'No patients have shared records with you yet.'
+            }
+          </p>
         </div>
       </div>
+
       <div className="dd-stats">
-        {stats.map((s,i)=>(
-          <div key={i} className={`dd-stat card dd-stat-${s.color}`} style={{animationDelay:`${i*.07}s`}}>
+        {stats.map((s, i) => (
+          <div key={i} className={`dd-stat card dd-stat-${s.color}`} style={{ animationDelay: `${i * .07}s` }}>
             <span className="stat-icon">{s.icon}</span>
-            <div><p className="stat-label">{s.label}</p><p className="stat-value">{s.value}</p><p className="stat-sub">{s.sub}</p></div>
+            <div>
+              <p className="stat-label">{s.label}</p>
+              <p className="stat-value">{s.value}</p>
+              <p className="stat-sub">{s.sub}</p>
+            </div>
           </div>
         ))}
       </div>
+
       <div className="card">
         <div className="card-header">
           <h2>Recent Patient Records</h2>
-          <button className="btn btn-outline btn-sm" onClick={()=>navigate('/doctor/patients')}>All Patients</button>
+          <button className="btn btn-outline btn-sm" onClick={() => navigate('/doctor/patients')}>All Patients</button>
         </div>
-        <table className="data-table">
-          <thead><tr><th>Patient</th><th>Condition</th><th>Shared Records</th><th>Date</th><th>Status</th><th></th></tr></thead>
-          <tbody>
-            {patients.map((p,i)=>(
-              <tr key={i}>
-                <td>
-                  <div style={{display:'flex',alignItems:'center',gap:10}}>
-                    <div className="avatar" style={{width:32,height:32,background:'var(--primary-light)',color:'var(--primary)',fontSize:11}}>{p.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
-                    <div><p style={{fontWeight:600,fontSize:13.5}}>{p.name}</p><p style={{fontSize:11,color:'var(--text-muted)'}}>{p.pid}</p></div>
-                  </div>
-                </td>
-                <td style={{fontSize:13,color:'var(--text-secondary)'}}>{p.condition}</td>
-                <td><span className="badge badge-muted">{p.shared}</span></td>
-                <td style={{fontSize:13,color:'var(--text-muted)'}}>{p.date}</td>
-                <td><span className={`badge badge-${stMap[p.status]}`}>{p.status}</span></td>
-                <td><button className="btn btn-primary btn-sm" onClick={()=>navigate('/doctor/records')}>View Records</button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {patients.length === 0 ? (
+          <div style={{ padding: '40px', textAlign: 'center', color: 'var(--text-muted)' }}>
+            <p style={{ fontSize: 28, marginBottom: 12 }}>📋</p>
+            <p>No patients have shared records yet.</p>
+            <p style={{ fontSize: 12, marginTop: 8 }}>Patients can share records by generating a link with your email address.</p>
+          </div>
+        ) : (
+          <table className="data-table">
+            <thead>
+              <tr><th>Patient</th><th>Records Shared</th><th>Shared On</th><th>Expires</th><th></th></tr>
+            </thead>
+            <tbody>
+              {patients.slice(0, 5).map((p, i) => (
+                <tr key={i}>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <div className="avatar" style={{ width: 32, height: 32, background: 'var(--primary-light)', color: 'var(--primary)', fontSize: 11 }}>
+                        {p.patient?.name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
+                      </div>
+                      <div>
+                        <p style={{ fontWeight: 600, fontSize: 13.5 }}>{p.patient?.name}</p>
+                        {p.patient?.phone && <p style={{ fontSize: 11, color: 'var(--text-muted)' }}>{p.patient.phone}</p>}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                      {p.records?.slice(0, 2).map(r => <span key={r._id} className="badge badge-muted">{r.title}</span>)}
+                      {p.records?.length > 2 && <span className="badge badge-muted">+{p.records.length - 2} more</span>}
+                    </div>
+                  </td>
+                  <td style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{new Date(p.sharedAt).toLocaleDateString('en-IN')}</td>
+                  <td style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{new Date(p.expiresAt).toLocaleDateString('en-IN')}</td>
+                  <td>
+                    <button className="btn btn-primary btn-sm" onClick={() => navigate('/doctor/records')}>View Records</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
-      <div className="card dd-banner">
-        <div style={{display:'flex',alignItems:'center',gap:14}}>
-          <span style={{fontSize:28}}>📋</span>
-          <div><h3>Shared Records Waiting</h3><p>3 patients have shared new records since your last login.</p></div>
+
+      {patients.length > 0 && (
+        <div className="card dd-banner">
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <span style={{ fontSize: 28 }}>📋</span>
+            <div>
+              <h3>Review Shared Records</h3>
+              <p>{totalRecords} record{totalRecords !== 1 ? 's' : ''} shared by {patients.length} patient{patients.length !== 1 ? 's' : ''}.</p>
+            </div>
+          </div>
+          <button className="btn btn-primary" onClick={() => navigate('/doctor/records')}>Review Now →</button>
         </div>
-        <button className="btn btn-primary" onClick={()=>navigate('/doctor/records')}>Review Now →</button>
-      </div>
+      )}
     </div>
   );
 }

@@ -27,14 +27,14 @@ const roles = [
     color: 'teal',
     cta: 'Access Doctor Portal',
   },
-  {
-    role: 'admin',
-    icon: '🏥',
-    title: 'Hospital Admin',
-    desc: 'Manage users, audit access logs, and keep your system running smoothly.',
-    color: 'purple',
-    cta: 'Access Admin Panel',
-  },
+//   {
+//     role: 'admin',
+//     icon: '🏥',
+//     title: 'Hospital Admin',
+//     desc: 'Manage users, audit access logs, and keep your system running smoothly.',
+//     color: 'purple',
+//     cta: 'Access Admin Panel',
+//   },
 ];
 
 const stats = [
@@ -54,7 +54,7 @@ export default function HomePage() {
         <div className="nav-inner">
           <div className="nav-logo">
             <div className="logo-mark">H</div>
-            <span>HealthVault</span>
+            <span>HealthLedger</span>
           </div>
           <div className="nav-links">
             <a href="#features">Features</a>
@@ -84,7 +84,7 @@ export default function HomePage() {
             history, <span className="hero-gradient">always with you</span>
           </h1>
           <p className="hero-sub anim-fade-up" style={{ animationDelay: '.2s' }}>
-            HealthVault is a secure digital health record manager that lets patients store,
+            Healthledger is a secure digital health record manager that lets patients store,
             organise and share their medical history with any doctor — instantly.
           </p>
           <div className="hero-actions anim-fade-up" style={{ animationDelay: '.3s' }}>
@@ -218,7 +218,7 @@ export default function HomePage() {
       <section className="cta-banner">
         <div className="cta-inner">
           <h2>Ready to take control of your health records?</h2>
-          <p>Join 50,000+ patients who already trust HealthVault.</p>
+          <p>Join 50,000+ patients who already trust HealthLedger.</p>
           <div className="cta-btns">
             <button className="btn btn-white btn-lg" onClick={() => navigate('/signup')}>Create free account</button>
             <button className="btn btn-outline btn-lg" style={{borderColor:'rgba(255,255,255,.5)',color:'#fff'}} onClick={() => navigate('/login')}>Sign in</button>
@@ -231,9 +231,9 @@ export default function HomePage() {
         <div className="footer-inner">
           <div className="footer-logo">
             <div className="logo-mark sm">H</div>
-            <span>HealthVault</span>
+            <span>HealthLedger</span>
           </div>
-          <p>© 2025 HealthVault. HIPAA Compliant · Secured by AWS · Made in India 🇮🇳</p>
+          <p>© 2025 HealthLedger. HIPAA Compliant · Secured by AWS · Made in India 🇮🇳</p>
           <div className="footer-links">
             <a href="#">Privacy</a>
             <a href="#">Terms</a>

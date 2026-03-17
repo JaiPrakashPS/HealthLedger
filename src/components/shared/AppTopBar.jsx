@@ -30,7 +30,7 @@ export default function AppTopBar({ onToggle }) {
   const [search, setSearch] = useState('');
 
   const segment = window.location.pathname.split('/').at(-1);
-  const page = pageTitles[segment] || { title: 'HealthVault', sub: '' };
+  const page = pageTitles[segment] || { title: 'HealthLedger', sub: '' };
   const initials = user?.name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'U';
   const unread = notifs.filter(n => n.unread).length;
 
