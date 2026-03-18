@@ -18,3 +18,64 @@
 .pac-actions{display:flex;gap:8px;flex-shrink:0;}
 .book-form{display:flex;flex-direction:column;gap:12px;}
 .book-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+/* ── Book modal step styles ── */
+.pa-step { display:flex; flex-direction:column; gap:10px; }
+.pa-step-label { display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--text-primary); }
+.pa-step-num {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--primary); color:#fff;
+  font-size:11px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+.pa-empty-hint {
+  font-size:13px; color:var(--text-secondary);
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:var(--r); padding:12px 14px; line-height:1.6;
+}
+
+/* Hospital grid */
+.pa-hospital-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.pa-hospital-btn {
+  display:flex; align-items:center; gap:8px;
+  padding:10px 12px; border-radius:var(--r);
+  border:1.5px solid var(--border); background:var(--bg);
+  font-size:13px; font-weight:500; color:var(--text-secondary);
+  cursor:pointer; transition:var(--ease); text-align:left;
+}
+.pa-hospital-btn:hover { border-color:var(--primary); color:var(--primary); background:var(--primary-light); }
+.pa-hospital-btn.active { border-color:var(--primary); background:var(--primary); color:#fff; }
+
+/* Doctor list */
+.pa-doctor-list { display:flex; flex-direction:column; gap:6px; }
+.pa-doctor-btn {
+  display:flex; align-items:center; gap:12px;
+  padding:10px 14px; border-radius:var(--r);
+  border:1.5px solid var(--border); background:var(--bg);
+  cursor:pointer; transition:var(--ease); text-align:left;
+}
+.pa-doctor-btn:hover  { border-color:var(--primary); background:var(--primary-light); }
+.pa-doctor-btn.active { border-color:var(--primary); background:var(--primary-light); }
+.pa-doc-avatar {
+  width:36px; height:36px; flex-shrink:0;
+  background:var(--primary-light); color:var(--primary);
+  font-size:13px; font-weight:700; font-family:var(--font-display);
+}
+.pa-doc-name { font-size:13.5px; font-weight:600; color:var(--text-primary); }
+.pa-doc-spec { font-size:11px; color:var(--text-muted); margin-top:2px; }
+.pa-doc-check {
+  width:22px; height:22px; border-radius:50%;
+  background:var(--primary); color:#fff;
+  font-size:12px; font-weight:700;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
+}
+
+/* Summary */
+.pa-summary {
+  background:var(--bg); border:1px solid var(--border);
+  border-radius:var(--r); padding:12px 14px;
+  display:flex; flex-direction:column; gap:8px;
+}
+.pa-summary-row { display:flex; justify-content:space-between; font-size:13px; }
+.pa-summary-row span  { color:var(--text-secondary); }
+.pa-summary-row strong { color:var(--text-primary); }
